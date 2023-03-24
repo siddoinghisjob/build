@@ -1,0 +1,29 @@
+name: Create Beamer Update
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  create-article:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Create Beamer Update
+      uses: curl-actions/request@v2
+      with:
+        url: https://api.getbeamer.com/v0/posts
+        method: POST
+        headers: |
+          {
+            "Content-Type": "application/json",
+            "Beamer-Api-Key": "b_PUZ1AdU5J+6lxe/HIPEPblCIjQ7CKoF8PDJ+wBILNK4="
+          }
+        data: |
+          {
+            "title": [ "'${{ github.event.release.tag_name }}'" ],
+            "content": [ "'${{ github.event.release.body }}'" ],
+            "category": "new",
+            "publish": true
+          }
